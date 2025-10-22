@@ -37,7 +37,12 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static('public'));
 // app.use(ajMiddleware)
-
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to slack API',
+  });
+});
 app.use('/api/auth', authRouter) 
 app.use('/api/post', postRouter)
 app.use('/api/chat', chatRouter)
