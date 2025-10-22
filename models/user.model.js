@@ -64,28 +64,27 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isSubscribed: {
+      type: Boolean,
+      default: false,
+    },
+    subscriptionPlan: {
+      type: String,
+      default: 'free',
+      enum: ['free', 'basic', 'pro', 'premium'],
+    },
+    subscriptionExpires: {
+       type: Date,
+      // select: false,
+    },
+    postCount: { type: Number, default: 0 },
+    lastPostReset: { type: Date, default: Date.now },
   },
 
   { timestamps: true }
 );
 
-// userSchema.pre('save', async function (next) {
-//   if (!this.isModified('password')) return next();
 
-//   const salt = await bcrypt.genSalt(10);
-//   this.password = await bcrypt.hash(this.password, salt);
-//   next();
-// });
-
-// userSchema.methods.matchPassword = async function (enteredPassword) {
-//   return await bcrypt.compare(enteredPassword, this.password);
-// };
-
-// userSchema.methods.toJSON = function () {
-//   const obj = this.toObject();
-//   delete obj.password;
-//   return obj;
-// };
 
 const User = mongoose.model('User', userSchema);
 export default User;
