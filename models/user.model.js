@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minlength: [3, 'Username must be at least 3 characters'],
     },
+      googleId: { type: String, unique: true },
     email: {
       type: String,
       required: [true, 'Email is required'],

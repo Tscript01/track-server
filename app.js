@@ -9,6 +9,7 @@ import chatRouter from './routes/chat.route.js'
 import messageRouter from './routes/message.route.js'
 import paymentRouter from './routes/payment.route.js'
 import errorMiddleware from './middlewares/error.middleware.js'
+import requestRouter from './routes/request.route.js';
 import { initSocket } from './socket.js'
 
 configDotenv()
@@ -48,6 +49,7 @@ app.use('/api/post', postRouter)
 app.use('/api/chat', chatRouter)
 app.use('/api/message', messageRouter)
 app.use('/api/payment', paymentRouter)
+app.use('/api/request', requestRouter);
 
 
 
