@@ -19,7 +19,7 @@ const generateTokens = (userId) => {
   return { accessToken, refreshToken };
 };
 
-requestRouter.get("/google", async (req, res, next) => {
+requestRouter.post("/google", async (req, res, next) => {
      const { idToken } = req.body;
     try {
         
