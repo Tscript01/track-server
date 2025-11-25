@@ -34,7 +34,7 @@ requestRouter.post("/google", async (req, res, next) => {
         const payload = ticket.getPayload();
         const { sub, email, name, picture } = payload;
         let user = await User.findOne({ googleId: sub });
-        const { accessToken, refreshToken } = generateTokens(sub);
+        const { accessToken, refreshToken } = generateTokens(user._id);
         if (!user) {
           user = await User.create({ googleId: sub, email, username: name, avatar: picture, password: '123456789', refreshToken  });
       }
