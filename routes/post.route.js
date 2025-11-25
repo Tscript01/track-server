@@ -14,7 +14,9 @@ const postRouter = express.Router();
 
 
 postRouter.get('/', getPosts);
-postRouter.post('/', auth, checkPostLimit, createPost);
+postRouter.post('/', auth, 
+                // checkPostLimit,
+                createPost);
 postRouter.get('/:id', getPostById);
 
 postRouter.patch('/:id', auth, updatePost);
