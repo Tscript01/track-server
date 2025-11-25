@@ -36,8 +36,7 @@ requestRouter.post("/google", async (req, res, next) => {
         let user = await User.findOne({ googleId: sub });
        
         if (!user) {
-          user = await User.create({ googleId: sub, email, username: name, avatar: picture, password: '123456789', refreshToken  });
-        const { accessToken, refreshToken } = generateTokens(user._id);
+          user = await User.create({ googleId: sub, email, username: name, avatar: picture, password: '123456789',  });
       }
               const { accessToken, refreshToken } = generateTokens(user._id);
    
