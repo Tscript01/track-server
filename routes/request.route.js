@@ -38,8 +38,8 @@ requestRouter.post("/google", async (req, res, next) => {
        
         if (!user) {
           user = await User.create({ googleId: sub, email, username: name, avatar: picture, password: '123456789', refreshToken  });
-      }
         const { accessToken, refreshToken } = generateTokens(user._id);
+      }
    
       user.refreshToken = refreshToken;
       user.isVerified = true;
