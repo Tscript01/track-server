@@ -1,7 +1,7 @@
 export const subscriptionPlans = {
   free: {
     name: 'free',
-    maxPosts: 1,
+    maxPosts: 8,
   },
   basic: {
     name: 'basic',

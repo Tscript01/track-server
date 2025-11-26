@@ -23,7 +23,6 @@ export const checkPostLimit = async (req, res, next) => {
         .json({ message: 'Subscription expired. Please renew.' });
     }
 
-    // Reset post count if 30 days passed since last reset
     const daysSinceReset =
       (now - new Date(user.lastPostReset)) / (1000 * 60 * 60 * 24);
 
@@ -35,9 +34,12 @@ export const checkPostLimit = async (req, res, next) => {
 
     // Check post limit
     if (user.postCount >= plan.maxPosts) {
-      return res.status(403).json({
-        message: `You have reached your post limit (${plan.maxPosts}) for the ${plan.name} kindly ugrade your plan to make more post.`,
-      });
+      next(
+        new Error(`Post limit reached for the ${plan.name} plan.` )
+      )
+      // return res.status(403).json({
+      //   message: `You have reached your post limit (${plan.maxPosts}) for the ${plan.name} kindly ugrade your plan to make more post.`,
+      // });
     }
 
     // Allow posting, increment count

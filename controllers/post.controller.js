@@ -1,18 +1,38 @@
 import Post from "../models/post.model.js";
+import { uploadToCloudinary } from "../config/cloudinary.js";
 
 export const createPost = async (req, res, next) => {
   try {
-    const { title, content, image } = req.body;
+    const { title, content } =  JSON.parse(req.body.data)
     if (!title || !content) {
       return res
         .status(400)
         .json({ message: 'Title and content are required' });
     }
+    
+    let attachments = [];
+
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const uploadResult = await uploadToCloudinary(
+          file.buffer,
+          file.originalname,
+          { folder: "trackposts" }
+        );
+        attachments.push({
+          filename: uploadResult.public_id,
+          originalName: file.originalname,
+          mimetype: file.mimetype,
+          size: file.size,
+          url: uploadResult.secure_url,
+        });
+      }
+    }
 
     const post = await Post.create({
       title,
       content,
-      image,
+      attachments,
       author: req.user._id, 
     });
 
@@ -26,16 +46,12 @@ export const createPost = async (req, res, next) => {
   }
 };
 
-/**
- * @desc Get all blog posts
- * @route GET /api/posts
- * @access Public
- */
+
 export const getPosts = async (req, res, next) => {
   try {
     const posts = await Post.find()
-      .populate('author', 'username email') // show author info
-      .sort({ createdAt: -1 }); // newest first
+      .populate('author', 'username email') 
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -47,11 +63,7 @@ export const getPosts = async (req, res, next) => {
   }
 };
 
-/**
- * @desc Get a single blog post by ID
- * @route GET /api/posts/:id
- * @access Public
- */
+
 export const getPostById = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id).populate(
@@ -63,7 +75,6 @@ export const getPostById = async (req, res, next) => {
       return res.status(404).json({ message: 'Post not found' });
     }
 
-    // increment views each time it’s opened
     post.views += 1;
     await post.save();
 
@@ -76,11 +87,7 @@ export const getPostById = async (req, res, next) => {
   }
 };
 
-/**
- * @desc Update a post (only the owner can update)
- * @route PUT /api/posts/:id
- * @access Private
- */
+
 export const updatePost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -108,11 +115,7 @@ export const updatePost = async (req, res, next) => {
   }
 };
 
-/**
- * @desc Delete a post (only the owner can delete)
- * @route DELETE /api/posts/:id
- * @access Private
- */
+
 export const deletePost = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
@@ -122,7 +125,9 @@ export const deletePost = async (req, res, next) => {
       return res
         .status(403)
         .json({ message: 'Not authorized to delete this post' });
-
+   for (const attachment of post.attachments) {
+      await deleteFromCloudinary(attachment.filename);
+    }
     await Post.findByIdAndDelete(req.params.id);
 
     res.status(200).json({
@@ -134,11 +139,7 @@ export const deletePost = async (req, res, next) => {
   }
 };
 
-/**
- * @desc Add comment to a post (optional)
- * @route POST /api/posts/:id/comments
- * @access Private
- */
+
 export const addComment = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.id);
