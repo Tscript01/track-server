@@ -1,6 +1,5 @@
 // cloudinary.js
 import { v2 as cloudinary } from "cloudinary";
-import { CloudinaryStorage } from "@fluidjs/multer-cloudinary";
 // import multer from "multer";
 import {
   CLOUDINARY_API_KEY,
@@ -14,53 +13,17 @@ cloudinary.config({
   api_key: CLOUDINARY_API_KEY,
   api_secret: CLOUDINARY_API_SECRET,
 });
-// console.log(cloudinary);
-
-
-
-// Storage configuration for demo videos
-const videoStorage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "course-demo-videos",
-    resource_type: "video",
-    allowed_formats: ["mp4", "avi", "mov", "wmv", "flv", "webm"],
-    transformation: [
-      { quality: "auto", fetch_format: "auto" },
-      { width: 1280, height: 720, crop: "limit" },
-    ],
-  },
-});
 
 
 
 
-// Multer configuration for videos
-// export const uploadVideo = multer({
-//   storage: videoStorage,
-//   limits: {
-//     fileSize: 100 * 1024 * 1024, // 100MB limit
-//   },
-//   fileFilter: (req, file, cb) => {
-//     const allowedTypes = [
-//       "video/mp4",
-//       "video/avi",
-//       "video/mov",
-//       "video/wmv",
-//       "video/quicktime",
-//       "video/webm",
-//     ];
-//     if (allowedTypes.includes(file.mimetype)) {
-//       cb(null, true);
-//     } else {
-//       cb(new Error("Invalid file type. Only video files are allowed."), false);
-//     }
-//   },
-// });
 
 
 
-// Helper function to upload file to Cloudinary
+
+
+
+
 export const uploadToCloudinary = async (buffer, options = {}) => {
   return new Promise((resolve, reject) => {
     const uploadOptions = {
@@ -83,7 +46,6 @@ export const uploadToCloudinary = async (buffer, options = {}) => {
   });
 };
 
-// Helper function to delete file from Cloudinary
 export const deleteFromCloudinary = async (
   publicId,
   resourceType = "image"
