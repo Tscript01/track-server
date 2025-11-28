@@ -11,7 +11,7 @@ export const createPost = async (req, res, next) => {
     }
     
     let attachments = [];
-
+console.log('man was here', req.files)
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
         const uploadResult = await uploadToCloudinary(
