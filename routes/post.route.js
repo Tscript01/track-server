@@ -42,7 +42,7 @@ const upload = multer({
 postRouter.get('/', getPosts);
 postRouter.post('/', auth, 
                 checkPostLimit,
-                 upload.single("posts"),
+                 upload.array("posts",5),
                 createPost);
 postRouter.get('/:id', getPostById);
 
