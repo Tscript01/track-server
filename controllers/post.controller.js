@@ -12,13 +12,9 @@ export const createPost = async (req, res, next) => {
     console.log('huit==');
     
     let attachments = [];
-<<<<<<< HEAD
 // console.log(req.files);
 
 
-=======
-console.log('man was here', req.files)
->>>>>>> 233fe5fa8418bada8204aab239aad197005016cb
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
         const uploadResult = await uploadToCloudinary(
