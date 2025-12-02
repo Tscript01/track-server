@@ -9,8 +9,11 @@ export const createPost = async (req, res, next) => {
         .status(400)
         .json({ message: 'Title and content are required' });
     }
+    console.log('huit==');
     
     let attachments = [];
+// console.log(req.files);
+
 
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
